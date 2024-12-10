@@ -1,3 +1,10 @@
+/*
+    TO DO:
+    Force colour of logo to change to a different colour when the same colour has been selected
+    Add check to see if logo has perfectly hit a corner
+        -> Then add an animation that plays on screen (confetti?), (maybe add rainbow effect for a few sec to the logo?)
+*/
+
 // Defines variables for the section and SVG DVD logo
 const section = document.querySelector("section");
 const logo = document.querySelector("#DVDLogo");
@@ -25,12 +32,14 @@ function update() {
 setInterval(() => {
   if (xPosition + logo.clientWidth >= window.innerWidth || xPosition <= 0) {
     xSpeed = -xSpeed;
-    switchColour();
+    //switchColourFromArray();
+    switchColourFromRandom();
   }
 
   if (yPosition + logo.clientHeight >= window.innerHeight || yPosition <= 0) {
     ySpeed = -ySpeed;
-    switchColour();
+    //switchColourFromArray();
+    switchColourFromRandom();
   }
 
   xPosition += xSpeed;
@@ -40,10 +49,20 @@ setInterval(() => {
 }, 1000 / FPS);
 
 // Function to randomly choose a colour from an array and then switch the colour when called
-function switchColour() {
+function switchColourFromArray() {
   let randomSelectedColour = Math.floor(Math.random() * logoColour.length);
   console.log(
     `Randomly selected colour: ${randomSelectedColour} - ${logoColour[randomSelectedColour]}`
   );
   logo.style.fill = logoColour[randomSelectedColour];
+}
+
+function switchColourFromRandom() {
+    let colour = "#";
+
+    // Generate random 16 length "hex" code. Then slice it to keep characters after 2nd and before 8th position (and convert to uppercase)
+    colour += Math.random().toString(16).slice(2,8).toUpperCase();
+
+    logo.style.fill = colour;
+    //return colour;
 }

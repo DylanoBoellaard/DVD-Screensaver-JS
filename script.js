@@ -32,14 +32,18 @@ function update() {
 setInterval(() => {
   if (xPosition + logo.clientWidth >= window.innerWidth || xPosition <= 0) {
     xSpeed = -xSpeed;
-    //switchColourFromArray();
-    switchColourFromRandom();
+
+    // Only enable 1 function!
+    //logo.style.fill = switchColourFromArray();
+    logo.style.fill = switchColourFromRandom();
   }
 
   if (yPosition + logo.clientHeight >= window.innerHeight || yPosition <= 0) {
     ySpeed = -ySpeed;
-    //switchColourFromArray();
-    switchColourFromRandom();
+
+    // Only enable 1 function!
+    //logo.style.fill = switchColourFromArray();
+    logo.style.fill = switchColourFromRandom();
   }
 
   xPosition += xSpeed;
@@ -48,21 +52,31 @@ setInterval(() => {
   update();
 }, 1000 / FPS);
 
-// Function to randomly choose a colour from an array and then switch the colour when called
+// Function to randomly choose a colour from a defined array
 function switchColourFromArray() {
   let randomSelectedColour = Math.floor(Math.random() * logoColour.length);
+
+  // Log colour to console
   console.log(
     `Randomly selected colour: ${randomSelectedColour} - ${logoColour[randomSelectedColour]}`
   );
-  logo.style.fill = logoColour[randomSelectedColour];
+
+  // Return the randomly selected colour
+  return logoColour[randomSelectedColour];
 }
 
+// Function to generate a true random colour
 function switchColourFromRandom() {
-    let colour = "#";
+  let colour = "#";
 
-    // Generate random 16 length "hex" code. Then slice it to keep characters after 2nd and before 8th position (and convert to uppercase)
-    colour += Math.random().toString(16).slice(2,8).toUpperCase();
+  // Generate random 16 length "hex" code. Then slice it to keep characters after 2nd and before 8th position (and convert to uppercase)
+  colour += Math.random().toString(16).slice(2, 8).toUpperCase();
 
-    logo.style.fill = colour;
-    //return colour;
+  // Log colour code to console
+  console.log(
+    `Randomly selected colour: ${colour}`
+  );
+
+  // Return the randomly generated colour code
+  return colour;
 }

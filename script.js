@@ -10,38 +10,41 @@ const section = document.querySelector("section");
 const logo = document.querySelector("#DVDLogo");
 const FPS = 60;
 
+// Defines colour array
 const logoColour = ["red", "orange", "yellow", "green", "blue", "purple"];
 
 // Get the current window height & width on the browser and adds 'px' for use in the stylesheet
 section.style.height = window.innerHeight + "px";
 section.style.width = window.innerWidth + "px";
 
-// Variables to define position & speed of the DVD logo
+// Variables to define starting position & speed of the DVD logo
 let xPosition = 10;
 let yPosition = 10;
 let xSpeed = 4;
 let ySpeed = 4;
 
-// Update function that will run ever 1 second.
+// Update function that will update the logo's position
 function update() {
   logo.style.left = xPosition + "px";
   logo.style.top = yPosition + "px";
 }
 
-// Function to run code every 1 second.
+// Function to run code every (calculated) milliseconds
 setInterval(() => {
+  // If the logo hits left or right of browser window, change direction
   if (xPosition + logo.clientWidth >= window.innerWidth || xPosition <= 0) {
     xSpeed = -xSpeed;
 
-    // Only enable 1 function!
+    // !! Only enable 1 function! !!
     //logo.style.fill = switchColourFromArray();
     logo.style.fill = switchColourFromRandom();
   }
 
+  // If the logo hits the bottom or top of browser window, change direction
   if (yPosition + logo.clientHeight >= window.innerHeight || yPosition <= 0) {
     ySpeed = -ySpeed;
 
-    // Only enable 1 function!
+    // !! Only enable 1 function! !!
     //logo.style.fill = switchColourFromArray();
     logo.style.fill = switchColourFromRandom();
   }
@@ -73,9 +76,7 @@ function switchColourFromRandom() {
   colour += Math.random().toString(16).slice(2, 8).toUpperCase();
 
   // Log colour code to console
-  console.log(
-    `Randomly selected colour: ${colour}`
-  );
+  console.log(`Randomly selected colour: ${colour}`);
 
   // Return the randomly generated colour code
   return colour;

@@ -1,6 +1,6 @@
 /*
     TO DO:
-    Force colour of logo to change to a different colour when the same colour has been selected
+    DONE --- Force colour of logo to change to a different colour when the same colour has been selected
     Add check to see if logo has perfectly hit a corner
         -> Then add an animation that plays on screen (confetti?), (maybe add rainbow effect for a few sec to the logo?)
 */
@@ -10,8 +10,9 @@ const section = document.querySelector("section");
 const logo = document.querySelector("#DVDLogo");
 const FPS = 60;
 
-// Defines colour array
+// Defines colour array & previousColour variable
 const logoColour = ["red", "orange", "yellow", "green", "blue", "purple"];
+let previousColour = null;
 
 // Get the current window height & width on the browser and adds 'px' for use in the stylesheet
 section.style.height = window.innerHeight + "px";
@@ -57,9 +58,18 @@ setInterval(() => {
 
 // Function to randomly choose a colour from a defined array
 function switchColourFromArray() {
-  let randomSelectedColour = Math.floor(Math.random() * logoColour.length);
+  let randomSelectedColour;
 
-  // Log colour to console
+  // Do-While loop to force colour to re-generate indefinitely until a new different colour, when previous colour is the same as newly generated one.
+  do {
+    // Generate a new random index / colour from the colour array
+    randomSelectedColour = Math.floor(Math.random() * logoColour.length);
+  } while (randomSelectedColour === previousColour);
+
+  // Update the previous colour index
+  previousColour = randomSelectedColour;
+
+  // Log the new colour for debugging
   console.log(
     `Randomly selected colour: ${randomSelectedColour} - ${logoColour[randomSelectedColour]}`
   );
@@ -72,8 +82,14 @@ function switchColourFromArray() {
 function switchColourFromRandom() {
   let colour = "#";
 
-  // Generate random 16 length "hex" code. Then slice it to keep characters after 2nd and before 8th position (and convert to uppercase)
-  colour += Math.random().toString(16).slice(2, 8).toUpperCase();
+  // Do-While loop to force colour to re-generate indefinitely until a new different colour, when previous colour is the same as newly generated one.
+  do {
+    // Generate random 16 length "hex" code. Then slice it to keep characters from the 2nd and before 8th position (2nd - 7th char) (and convert to uppercase)
+    colour += Math.random().toString(16).slice(2, 8).toUpperCase();
+  } while (colour === previousColour);
+
+  // Update the previous colour index
+  previousColour = colour;
 
   // Log colour code to console
   console.log(`Randomly selected colour: ${colour}`);

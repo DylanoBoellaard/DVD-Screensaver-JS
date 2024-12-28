@@ -10,11 +10,34 @@ body {
 body section {
   position: relative;
   background-color: #2d2d2d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 body section #DVDLogo {
   position: absolute;
   width: 200px;
   fill: crimson;
+}
+body section #debugMenu {
+  position: fixed;
+  bottom: 0px;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 10px 0;
+}
+body section #debugMenu .button {
+  background: #444;
+  color: white;
+  padding: 8px 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+body section #debugMenu .button:hover {
+  background: #666;
 }
 
 /*# sourceMappingURL=style.css.map */

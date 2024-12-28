@@ -1,8 +1,10 @@
 /*
     TO DO:
-    Force colour of logo to change to a different colour when the same colour has been selected
+    DONE - Force colour of logo to change to a different colour when the same colour has been selected (while statement)
     Add check to see if logo has perfectly hit a corner
         -> Then add an animation that plays on screen (confetti?), (maybe add rainbow effect for a few sec to the logo?)
+    Allow logo to start from the center of the screen or a randomized position
+        -> Choose random starting direction for true DVD randomness
 */
 
 // Defines variables for the section and SVG DVD logo
@@ -10,8 +12,9 @@ const section = document.querySelector("section");
 const logo = document.querySelector("#DVDLogo");
 const FPS = 60;
 
-// Defines colour array
+// Defines colour array & previousColour variable
 const logoColour = ["red", "orange", "yellow", "green", "blue", "purple"];
+let previousColour = null;
 
 // Get the current window height & width on the browser and adds 'px' for use in the stylesheet
 section.style.height = window.innerHeight + "px";
@@ -49,6 +52,20 @@ setInterval(() => {
     logo.style.fill = switchColourFromRandom();
   }
 
+  // Check if the logo hits any of the four corners
+  const hitTopLeft = xPosition === 0 && yPosition === 0;
+  const hitTopRight =
+    xPosition + logo.clientWidth === window.innerWidth && yPosition === 0;
+  const hitBottomLeft =
+    xPosition === 0 && yPosition + logo.clientHeight === window.innerHeight;
+  const hitBottomRight =
+    xPosition + logo.clientWidth === window.innerWidth &&
+    yPosition + logo.clientHeight === window.innerHeight;
+
+  if (hitTopLeft || hitTopRight || hitBottomLeft || hitBottomRight) {
+    console.log("The logo hit a corner!");
+  }
+
   xPosition += xSpeed;
   yPosition += ySpeed;
 
@@ -57,9 +74,18 @@ setInterval(() => {
 
 // Function to randomly choose a colour from a defined array
 function switchColourFromArray() {
-  let randomSelectedColour = Math.floor(Math.random() * logoColour.length);
+  let randomSelectedColour;
 
-  // Log colour to console
+  // Do-While loop to force colour to re-generate indefinitely until a new different colour, when previous colour is the same as newly generated one.
+  do {
+    // Generate a new random index / colour from the colour array
+    randomSelectedColour = Math.floor(Math.random() * logoColour.length);
+  } while (randomSelectedColour === previousColour);
+
+  // Update the previous colour index
+  previousColour = randomSelectedColour;
+
+  // Log the new colour for debugging
   console.log(
     `Randomly selected colour: ${randomSelectedColour} - ${logoColour[randomSelectedColour]}`
   );
@@ -72,12 +98,50 @@ function switchColourFromArray() {
 function switchColourFromRandom() {
   let colour = "#";
 
-  // Generate random 16 length "hex" code. Then slice it to keep characters after 2nd and before 8th position (and convert to uppercase)
-  colour += Math.random().toString(16).slice(2, 8).toUpperCase();
+  // Do-While loop to force colour to re-generate indefinitely until a new different colour, when previous colour is the same as newly generated one.
+  do {
+    // Generate random 16 length "hex" code. Then slice it to keep characters from the 2nd and before 8th position (2nd - 7th char) (and convert to uppercase)
+    colour += Math.random().toString(16).slice(2, 8).toUpperCase();
+  } while (colour === previousColour);
+
+  // Update the previous colour index
+  previousColour = colour;
 
   // Log colour code to console
   console.log(`Randomly selected colour: ${colour}`);
 
   // Return the randomly generated colour code
   return colour;
+}
+
+// Function to set the logo's position to any of the corners
+function setLogoPosition(corner) {
+  switch (corner) {
+    case "topLeft":
+      xPosition = 0;
+      yPosition = 0;
+      break;
+
+    case "topRight":
+      xPosition = window.innerWidth - logo.clientWidth;
+      yPosition = 0;
+      break;
+
+    case "bottomLeft":
+      xPosition = 0;
+      yPosition = window.innerHeight - logo.clientHeight;
+      break;
+
+    case "bottomRight":
+      xPosition = window.innerWidth - logo.clientWidth;
+      yPosition = window.innerHeight - logo.clientHeight;
+      break;
+
+    default:
+      console.error("Invalid corner specified.");
+      return;
+  }
+
+  update();
+  console.log(`Logo moved to ${corner}`);
 }

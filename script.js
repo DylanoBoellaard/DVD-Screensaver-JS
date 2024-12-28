@@ -10,7 +10,8 @@
 // Defines variables for the section and SVG DVD logo
 const section = document.querySelector("section");
 const logo = document.querySelector("#DVDLogo");
-const FPS = 60;
+let numberInput = document.querySelector("#FPSInput");
+let FPS = 60;
 
 // Defines colour array & previousColour variable
 const logoColour = ["red", "orange", "yellow", "green", "blue", "purple"];
@@ -32,45 +33,67 @@ function update() {
   logo.style.top = yPosition + "px";
 }
 
-// Function to run code every (calculated) milliseconds
-setInterval(() => {
-  // If the logo hits left or right of browser window, change direction
-  if (xPosition + logo.clientWidth >= window.innerWidth || xPosition <= 0) {
-    xSpeed = -xSpeed;
+// Stores the Id (and the function itself) of the current setInterval so that it can be cleared
+let intervalId;
 
-    // !! Only enable 1 function! !!
-    //logo.style.fill = switchColourFromArray();
-    logo.style.fill = switchColourFromRandom();
-  }
+// Function to start the interval with the current FPS
+function startAnimation() {
+  if (intervalId) clearInterval(intervalId); // Clear any existing interval
 
-  // If the logo hits the bottom or top of browser window, change direction
-  if (yPosition + logo.clientHeight >= window.innerHeight || yPosition <= 0) {
-    ySpeed = -ySpeed;
+  intervalId = setInterval(() => {
+    // If the logo hits left or right of browser window, change direction
+    if (xPosition + logo.clientWidth >= window.innerWidth || xPosition <= 0) {
+      xSpeed = -xSpeed;
 
-    // !! Only enable 1 function! !!
-    //logo.style.fill = switchColourFromArray();
-    logo.style.fill = switchColourFromRandom();
-  }
+      // !! Only enable 1 function! !!
+      //logo.style.fill = switchColourFromArray();
+      logo.style.fill = switchColourFromRandom();
+    }
 
-  // Check if the logo hits any of the four corners
-  const hitTopLeft = xPosition === 0 && yPosition === 0;
-  const hitTopRight =
-    xPosition + logo.clientWidth === window.innerWidth && yPosition === 0;
-  const hitBottomLeft =
-    xPosition === 0 && yPosition + logo.clientHeight === window.innerHeight;
-  const hitBottomRight =
-    xPosition + logo.clientWidth === window.innerWidth &&
-    yPosition + logo.clientHeight === window.innerHeight;
+    // If the logo hits the bottom or top of browser window, change direction
+    if (yPosition + logo.clientHeight >= window.innerHeight || yPosition <= 0) {
+      ySpeed = -ySpeed;
 
-  if (hitTopLeft || hitTopRight || hitBottomLeft || hitBottomRight) {
-    console.log("The logo hit a corner!");
-  }
+      // !! Only enable 1 function! !!
+      //logo.style.fill = switchColourFromArray();
+      logo.style.fill = switchColourFromRandom();
+    }
 
-  xPosition += xSpeed;
-  yPosition += ySpeed;
+    // Check if the logo hits any of the four corners
+    const hitTopLeft = xPosition === 0 && yPosition === 0;
+    const hitTopRight =
+      xPosition + logo.clientWidth === window.innerWidth && yPosition === 0;
+    const hitBottomLeft =
+      xPosition === 0 && yPosition + logo.clientHeight === window.innerHeight;
+    const hitBottomRight =
+      xPosition + logo.clientWidth === window.innerWidth &&
+      yPosition + logo.clientHeight === window.innerHeight;
 
-  update();
-}, 1000 / FPS);
+    if (hitTopLeft || hitTopRight || hitBottomLeft || hitBottomRight) {
+      console.log("The logo hit a corner!");
+    }
+
+    xPosition += xSpeed;
+    yPosition += ySpeed;
+
+    update();
+  }, 1000 / FPS);
+}
+
+// Start the animation initially on page load
+startAnimation();
+
+// Listen for changes in the FPS input and restarts the interval
+numberInput.addEventListener("change", function (e) {
+  // Makes sure input is number by parsing and defaults to 60 if input is invalid
+  FPS = parseInt(numberInput.value, 10) || 60;
+
+  // Logs speed to console
+  console.log(`Input: ${numberInput.value} FPS: ${FPS}`);
+
+  // Restart the animation with the new FPS
+  startAnimation();
+});
 
 // Function to randomly choose a colour from a defined array
 function switchColourFromArray() {

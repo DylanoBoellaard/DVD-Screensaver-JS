@@ -1,7 +1,7 @@
 /*
     TO DO:
     DONE - Force colour of logo to change to a different colour when the same colour has been selected (while statement)
-    Add check to see if logo has perfectly hit a corner
+    DONE - Add check to see if logo has perfectly hit a corner
         -> Then add an animation that plays on screen (confetti?), (maybe add rainbow effect for a few sec to the logo?)
     Allow logo to start from the center of the screen or a randomized position
         -> Choose random starting direction for true DVD randomness
@@ -167,4 +167,16 @@ function setLogoPosition(corner) {
 
   update();
   console.log(`Logo moved to ${corner}`);
+}
+
+const confettiWrapper = document.querySelector('.confetti-wrapper');
+// Generate 50 confetti and repeat those same 50 infinitely
+for (let i = 0; i < 50; i++) {
+  const confetti = document.createElement('div');
+  confetti.classList.add('confetti-piece');
+  confetti.style.left = `${Math.random() * 100}%`;
+  confetti.style.setProperty('--fall-duration', `${Math.random() * 3 + 3}s`);
+  // confetti.style.setProperty('--confetti-color', getRandomColor()); ORIGINAL CODE
+  confetti.style.setProperty('--confetti-color', switchColourFromRandom());
+  confettiWrapper.appendChild(confetti);
 }

@@ -170,13 +170,22 @@ function setLogoPosition(corner) {
 }
 
 const confettiWrapper = document.querySelector('.confetti-wrapper');
+let confettiEnabled = true; // Boolean to track confetti state
+
+// Function to toggle confetti on or off
+function toggleConfetti() {
+  confettiEnabled = !confettiEnabled;
+  confettiWrapper.style.display = confettiEnabled ? "block" : "none"; // Show or hide confetti wrapper
+  console.log(`Confetti is now ${confettiEnabled ? "enabled" : "disabled"}.`);
+  
+}
+
 // Generate 50 confetti and repeat those same 50 infinitely
 for (let i = 0; i < 50; i++) {
   const confetti = document.createElement('div');
   confetti.classList.add('confetti-piece');
   confetti.style.left = `${Math.random() * 100}%`;
   confetti.style.setProperty('--fall-duration', `${Math.random() * 3 + 3}s`);
-  // confetti.style.setProperty('--confetti-color', getRandomColor()); ORIGINAL CODE
   confetti.style.setProperty('--confetti-color', switchColourFromRandom());
   confettiWrapper.appendChild(confetti);
 }

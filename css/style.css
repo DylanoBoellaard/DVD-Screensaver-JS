@@ -39,6 +39,9 @@ body section #debugMenu .button {
 body section #debugMenu .button:hover {
   background: #666;
 }
+body section #debugMenu .active {
+  background-color: green;
+}
 
 .confetti-wrapper {
   position: fixed;

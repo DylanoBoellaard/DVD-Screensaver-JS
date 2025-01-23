@@ -71,6 +71,7 @@ function startAnimation() {
 
     if (hitTopLeft || hitTopRight || hitBottomLeft || hitBottomRight) {
       console.log("The logo hit a corner!");
+      createCornerConfetti(); // Trigger the corner confetti
     }
 
     xPosition += xSpeed;
@@ -188,4 +189,28 @@ for (let i = 0; i < 50; i++) {
   confetti.style.setProperty('--fall-duration', `${Math.random() * 3 + 3}s`);
   confetti.style.setProperty('--confetti-color', switchColourFromRandom());
   confettiWrapper.appendChild(confetti);
+}
+
+// Function to create corner-triggered confetti
+function createCornerConfetti() {
+  const cornerConfettiWrapper = document.createElement('div');
+  cornerConfettiWrapper.classList.add('corner-confetti-wrapper');
+  section.appendChild(cornerConfettiWrapper);
+
+  // Generate 30 confetti pieces
+  for (let i = 0; i < 30; i++) {
+    const confetti = document.createElement('div');
+    confetti.classList.add('corner-confetti-piece');
+    confetti.style.left = `${Math.random() * 100}%`; // Spread randomly across the bottom
+    confetti.style.bottom = '0'; // Start from the bottom
+    confetti.style.setProperty('--rise-duration', `${Math.random() * 1.5 + 2}s`);
+    confetti.style.setProperty('--fall-duration', `${Math.random() * 2 + 2}s`);
+    confetti.style.setProperty('--confetti-color', switchColourFromRandom());
+    cornerConfettiWrapper.appendChild(confetti);
+  }
+
+  // Remove the wrapper after the confetti has fallen
+  setTimeout(() => {
+    cornerConfettiWrapper.remove();
+  }, 6000); // Matches the total duration of rise and fall
 }

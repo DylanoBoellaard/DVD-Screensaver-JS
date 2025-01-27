@@ -96,26 +96,26 @@ body {
   overflow: visible;
 }
 
-.corner-confetti-piece {
+.center-confetti-piece {
   position: absolute;
   width: 10px;
   height: 20px;
   background: var(--confetti-color, red);
-  opacity: 0.9;
-  animation: confetti-rise-and-fall calc(var(--rise-duration) + var(--fall-duration)) linear forwards;
+  opacity: 1;
+
+  animation: confetti-center-spread var(--spread-duration) ease-out forwards;
 }
 
-@keyframes confetti-rise-and-fall {
+@keyframes confetti-center-spread {
   0% {
-    transform: translateY(0) rotate(0deg); /* Start at the bottom */
+    transform: translate(0, 0) rotate(0deg); /* Start at the center */
     opacity: 1;
   }
   50% {
-    transform: translateY(-100vh) rotate(180deg); /* Move upward */
-    opacity: 1;
+    opacity: 1; /* Maintain full opacity in the middle */
   }
   100% {
-    transform: translateY(0) rotate(360deg); /* Move back down */
-    opacity: 0.8;
+    transform: translate(var(--x-offset), var(--y-offset)) rotate(360deg); /* Spread out to offsets */
+    opacity: 0; /* Fade out as it spreads */
   }
 }

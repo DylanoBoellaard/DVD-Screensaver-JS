@@ -71,7 +71,7 @@ function startAnimation() {
 
     if (hitTopLeft || hitTopRight || hitBottomLeft || hitBottomRight) {
       console.log("The logo hit a corner!");
-      createCornerConfetti(); // Trigger the corner confetti
+      createCenterSpreadConfetti(); // Trigger the corner confetti
     }
 
     xPosition += xSpeed;
@@ -191,26 +191,41 @@ for (let i = 0; i < 50; i++) {
   confettiWrapper.appendChild(confetti);
 }
 
-// Function to create corner-triggered confetti
-function createCornerConfetti() {
-  const cornerConfettiWrapper = document.createElement('div');
-  cornerConfettiWrapper.classList.add('corner-confetti-wrapper');
-  section.appendChild(cornerConfettiWrapper);
+function createCenterSpreadConfetti() {
+  const centerConfettiWrapper = document.createElement('div');
+  centerConfettiWrapper.classList.add('center-confetti-wrapper');
+  section.appendChild(centerConfettiWrapper);
 
-  // Generate 30 confetti pieces
-  for (let i = 0; i < 30; i++) {
+  // Generate 50 confetti pieces
+  for (let i = 0; i < 50; i++) {
     const confetti = document.createElement('div');
-    confetti.classList.add('corner-confetti-piece');
-    confetti.style.left = `${Math.random() * 100}%`; // Spread randomly across the bottom
-    confetti.style.bottom = '0'; // Start from the bottom
-    confetti.style.setProperty('--rise-duration', `${Math.random() * 1.5 + 2}s`);
-    confetti.style.setProperty('--fall-duration', `${Math.random() * 2 + 2}s`);
+    confetti.classList.add('center-confetti-piece');
+
+    // Set the starting position at the center of the screen
+    confetti.style.left = `50%`;
+    confetti.style.bottom = `50%`;
+
+    // Randomize the animation duration
+    confetti.style.setProperty('--spread-duration', `${Math.random() * 1.5 + 2}s`);
+
+    // Assign a random angle and distance for the spread
+    const angle = Math.random() * 360; // Random angle in degrees
+    const distance = Math.random() * 300 + 100; // Spread distance (100px to 400px)
+    const xOffset = Math.cos((angle * Math.PI) / 180) * distance;
+    const yOffset = Math.sin((angle * Math.PI) / 180) * distance;
+
+    // Set the spread offsets
+    confetti.style.setProperty('--x-offset', `${xOffset}px`);
+    confetti.style.setProperty('--y-offset', `${yOffset}px`);
+
+    // Assign a random color
     confetti.style.setProperty('--confetti-color', switchColourFromRandom());
-    cornerConfettiWrapper.appendChild(confetti);
+
+    centerConfettiWrapper.appendChild(confetti);
   }
 
-  // Remove the wrapper after the confetti has fallen
+  // Remove the wrapper after the confetti animation is complete
   setTimeout(() => {
-    cornerConfettiWrapper.remove();
-  }, 6000); // Matches the total duration of rise and fall
+    centerConfettiWrapper.remove();
+  }, 4000); // Matches the maximum duration
 }

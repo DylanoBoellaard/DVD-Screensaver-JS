@@ -11,7 +11,11 @@
 const section = document.querySelector("section");
 const logo = document.querySelector("#DVDLogo");
 let numberInput = document.querySelector("#FPSInput");
+
+// Animation speed of the DVD logo
 let FPS = 60;
+let xSpeed = 4;
+let ySpeed = 4;
 
 // Defines colour array & previousColour variable
 const logoColour = ["red", "orange", "yellow", "green", "blue", "purple"];
@@ -21,11 +25,26 @@ let previousColour = null;
 section.style.height = window.innerHeight + "px";
 section.style.width = window.innerWidth + "px";
 
-// Variables to define starting position & speed of the DVD logo
-let xPosition = 10;
-let yPosition = 10;
-let xSpeed = 4;
-let ySpeed = 4;
+/*
+     -- RANDOM POSITION
+*/
+
+
+// Function to generate a random starting position within the window bounds
+function getRandomPosition() {
+  return {
+    x: Math.random() * (window.innerWidth - logo.clientWidth),
+    y: Math.random() * (window.innerHeight - logo.clientHeight),
+  };
+}
+
+// Set initial random position
+const initialPosition = getRandomPosition();
+let xPosition = initialPosition.x;
+let yPosition = initialPosition.y;
+
+// Update the initial position before animation starts
+update();
 
 // Update function that will update the logo's position
 function update() {
@@ -33,10 +52,15 @@ function update() {
   logo.style.top = yPosition + "px";
 }
 
+
+/*
+      -- INTERVAL & ANIMATION SYSTEM
+*/
+
 // Stores the Id (and the function itself) of the current setInterval so that it can be cleared
 let intervalId;
 
-// Function to start the interval with the current FPS
+// Function to start the interval with the current FPS (DVD moving animation)
 function startAnimation() {
   if (intervalId) clearInterval(intervalId); // Clear any existing interval
 
@@ -61,22 +85,20 @@ function startAnimation() {
 
     // Check if the logo hits any of the four corners
     const hitTopLeft = xPosition === 0 && yPosition === 0;
-    const hitTopRight =
-      xPosition + logo.clientWidth === window.innerWidth && yPosition === 0;
-    const hitBottomLeft =
-      xPosition === 0 && yPosition + logo.clientHeight === window.innerHeight;
-    const hitBottomRight =
-      xPosition + logo.clientWidth === window.innerWidth &&
-      yPosition + logo.clientHeight === window.innerHeight;
+    const hitTopRight = xPosition + logo.clientWidth === window.innerWidth && yPosition === 0;
+    const hitBottomLeft = xPosition === 0 && yPosition + logo.clientHeight === window.innerHeight;
+    const hitBottomRight = xPosition + logo.clientWidth === window.innerWidth && yPosition + logo.clientHeight === window.innerHeight;
 
     if (hitTopLeft || hitTopRight || hitBottomLeft || hitBottomRight) {
       console.log("The logo hit a corner!");
       createCenterSpreadConfetti(); // Trigger the corner confetti
     }
 
+    // Update the position of the DVD logo with the defined speed
     xPosition += xSpeed;
     yPosition += ySpeed;
 
+    // Function to allow for the DVD logo to move to the new position
     update();
   }, 1000 / FPS);
 }
@@ -86,7 +108,7 @@ startAnimation();
 
 // Listen for changes in the FPS input and restarts the interval
 numberInput.addEventListener("change", function (e) {
-  // Makes sure input is number by parsing and defaults to 60 if input is invalid
+  // Makes sure the input is a number by parsing, and defaults to 60 if input is invalid
   FPS = parseInt(numberInput.value, 10) || 60;
 
   // Logs speed to console
@@ -96,11 +118,16 @@ numberInput.addEventListener("change", function (e) {
   startAnimation();
 });
 
+
+/*
+      -- COLOUR STUFF
+*/
+
 // Function to randomly choose a colour from a defined array
 function switchColourFromArray() {
   let randomSelectedColour;
 
-  // Do-While loop to force colour to re-generate indefinitely until a new different colour, when previous colour is the same as newly generated one.
+  // Do-While loop to force colour to re-generate indefinitely until a new different colour has been chosen, when previous colour is the same as newly generated one.
   do {
     // Generate a new random index / colour from the colour array
     randomSelectedColour = Math.floor(Math.random() * logoColour.length);
@@ -138,6 +165,11 @@ function switchColourFromRandom() {
   return colour;
 }
 
+
+/*
+      -- SET LOGO POSITION DEBUG STUFF
+*/
+
 // Function to set the logo's position to any of the corners
 function setLogoPosition(corner) {
   switch (corner) {
@@ -166,10 +198,17 @@ function setLogoPosition(corner) {
       return;
   }
 
+  // Update the logo's position with the chosen corner
   update();
   console.log(`Logo moved to ${corner}`);
 }
 
+
+/*
+      -- CONFETTI STUFF
+*/
+
+// Variables for the confetti
 const confettiWrapper = document.querySelector('.confetti-wrapper');
 let confettiEnabled = true; // Boolean to track confetti state
 
@@ -191,6 +230,7 @@ for (let i = 0; i < 50; i++) {
   confettiWrapper.appendChild(confetti);
 }
 
+// Confetti function to create spread confetti in the center of the screen
 function createCenterSpreadConfetti() {
   const centerConfettiWrapper = document.createElement('div');
   centerConfettiWrapper.classList.add('center-confetti-wrapper');

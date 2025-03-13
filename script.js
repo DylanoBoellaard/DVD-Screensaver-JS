@@ -17,9 +17,6 @@ let FPS = 60;
 const logoColour = ["red", "orange", "yellow", "green", "blue", "purple"];
 let previousColour = null;
 
-// Defines the confetti wrapper
-const confettiWrapper = document.querySelector(".confetti-wrapper");
-
 // Get the current window height & width on the browser and adds 'px' for use in the stylesheet
 section.style.height = window.innerHeight + "px";
 section.style.width = window.innerWidth + "px";
@@ -173,20 +170,7 @@ function setLogoPosition(corner) {
   console.log(`Logo moved to ${corner}`);
 }
 
-// // INTERVAL SYSTEM, NOT SMOOTH ENOUGH! Function to create a single confetti piece
-// function createConfetti() {
-//   const confetti = document.createElement("div");
-//   confetti.classList.add("confetti-piece");
-//   confetti.style.left = `${Math.random() * 100}%`;
-//   confetti.style.setProperty("--fall-duration", `${Math.random() * 3 + 3}s`);
-//   confetti.style.setProperty("--confetti-color", switchColourFromRandom());
-//   confettiWrapper.appendChild(confetti);
-
-//   // Optional: Remove confetti from DOM after it finishes animating to prevent overflow
-//   setTimeout(() => confetti.remove(), 6000); // Maximum fall duration + some buffer
-// }
-
-// const confettiWrapper = document.querySelector(".confetti-wrapper");
+const confettiWrapper = document.querySelector('.confetti-wrapper');
 let confettiEnabled = true; // Boolean to track confetti state
 
 // Function to toggle confetti on or off
@@ -199,8 +183,8 @@ function toggleConfetti() {
 
 // Generate 50 confetti and repeat those same 50 infinitely
 for (let i = 0; i < 50; i++) {
-  const confetti = document.createElement("div");
-  confetti.classList.add("confetti-piece");
+  const confetti = document.createElement('div');
+  confetti.classList.add('confetti-piece');
   confetti.style.left = `${Math.random() * 100}%`;
   confetti.style.setProperty('--fall-duration', `${Math.random() * 3 + 3}s`);
   confetti.style.setProperty('--confetti-color', switchColourFromRandom());

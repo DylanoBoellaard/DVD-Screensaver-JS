@@ -39,6 +39,9 @@ body section #debugMenu .button {
 body section #debugMenu .button:hover {
   background: #666;
 }
+body section #debugMenu .active {
+  background-color: green;
+}
 
 .confetti-wrapper {
   position: fixed;
@@ -75,6 +78,38 @@ body section #debugMenu .button:hover {
   }
   100% {
     transform: translateY(100vh) rotate(360deg);
+  }
+}
+.corner-confetti-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0; /* Only needed at the bottom */
+  pointer-events: none; /* Prevent interaction */
+  overflow: visible;
+}
+
+.center-confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 20px;
+  background: var(--confetti-color, red);
+  opacity: 1;
+  animation: confetti-center-spread var(--spread-duration) ease-out forwards;
+}
+
+@keyframes confetti-center-spread {
+  0% {
+    transform: translate(0, 0) rotate(0deg); /* Start at the center */
+    opacity: 1;
+  }
+  50% {
+    opacity: 1; /* Maintain full opacity in the middle */
+  }
+  100% {
+    transform: translate(var(--x-offset), var(--y-offset)) rotate(360deg); /* Spread out to offsets */
+    opacity: 0; /* Fade out as it spreads */
   }
 }
 

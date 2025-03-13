@@ -74,6 +74,7 @@ function startAnimation() {
 
     if (hitTopLeft || hitTopRight || hitBottomLeft || hitBottomRight) {
       console.log("The logo hit a corner!");
+      createCenterSpreadConfetti(); // Trigger the corner confetti
     }
 
     xPosition += xSpeed;
@@ -186,12 +187,61 @@ function setLogoPosition(corner) {
 // }
 
 // const confettiWrapper = document.querySelector(".confetti-wrapper");
+let confettiEnabled = true; // Boolean to track confetti state
+
+// Function to toggle confetti on or off
+function toggleConfetti() {
+  confettiEnabled = !confettiEnabled;
+  confettiWrapper.style.display = confettiEnabled ? "block" : "none"; // Show or hide confetti wrapper
+  console.log(`Confetti is now ${confettiEnabled ? "enabled" : "disabled"}.`);
+  
+}
+
 // Generate 50 confetti and repeat those same 50 infinitely
 for (let i = 0; i < 50; i++) {
   const confetti = document.createElement("div");
   confetti.classList.add("confetti-piece");
   confetti.style.left = `${Math.random() * 100}%`;
-  confetti.style.setProperty("--fall-duration", `${Math.random() * 3 + 3}s`);
-  confetti.style.setProperty("--confetti-color", switchColourFromRandom());
+  confetti.style.setProperty('--fall-duration', `${Math.random() * 3 + 3}s`);
+  confetti.style.setProperty('--confetti-color', switchColourFromRandom());
   confettiWrapper.appendChild(confetti);
+}
+
+function createCenterSpreadConfetti() {
+  const centerConfettiWrapper = document.createElement('div');
+  centerConfettiWrapper.classList.add('center-confetti-wrapper');
+  section.appendChild(centerConfettiWrapper);
+
+  // Generate 50 confetti pieces
+  for (let i = 0; i < 50; i++) {
+    const confetti = document.createElement('div');
+    confetti.classList.add('center-confetti-piece');
+
+    // Set the starting position at the center of the screen
+    confetti.style.left = `50%`;
+    confetti.style.bottom = `50%`;
+
+    // Randomize the animation duration
+    confetti.style.setProperty('--spread-duration', `${Math.random() * 1.5 + 2}s`);
+
+    // Assign a random angle and distance for the spread
+    const angle = Math.random() * 360; // Random angle in degrees
+    const distance = Math.random() * 300 + 100; // Spread distance (100px to 400px)
+    const xOffset = Math.cos((angle * Math.PI) / 180) * distance;
+    const yOffset = Math.sin((angle * Math.PI) / 180) * distance;
+
+    // Set the spread offsets
+    confetti.style.setProperty('--x-offset', `${xOffset}px`);
+    confetti.style.setProperty('--y-offset', `${yOffset}px`);
+
+    // Assign a random color
+    confetti.style.setProperty('--confetti-color', switchColourFromRandom());
+
+    centerConfettiWrapper.appendChild(confetti);
+  }
+
+  // Remove the wrapper after the confetti animation is complete
+  setTimeout(() => {
+    centerConfettiWrapper.remove();
+  }, 4000); // Matches the maximum duration
 }

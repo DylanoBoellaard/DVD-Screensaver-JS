@@ -3,8 +3,8 @@
     DONE - Force colour of logo to change to a different colour when the same colour has been selected (while statement)
     DONE - Add check to see if logo has perfectly hit a corner
         -> Then add an animation that plays on screen (confetti?), (maybe add rainbow effect for a few sec to the logo?)
-    Allow logo to start from the center of the screen or a randomized position
-        -> Choose random starting direction for true DVD randomness
+    DONE - Allow logo to start from the center of the screen or a randomized position
+        DONE -> Choose random starting direction for true DVD randomness
 */
 
 // Defines variables for the section and SVG DVD logo
@@ -14,8 +14,6 @@ let numberInput = document.querySelector("#FPSInput");
 
 // Animation speed of the DVD logo
 let FPS = 60;
-let xSpeed = 4;
-let ySpeed = 4;
 
 // Defines colour array & previousColour variable
 const logoColour = ["red", "orange", "yellow", "green", "blue", "purple"];
@@ -29,6 +27,16 @@ section.style.width = window.innerWidth + "px";
      -- RANDOM POSITION
 */
 
+/*
+  Random movement direction for the DVD logo on startup
+
+  Math.Random checks if it's true or false.
+  If true  > Speed =  4 (SE direction)
+  If false > Speed = -4 (NW direction)
+  Xspeed & Yspeed have separate calls, thus combined, all diagonal directions are possible (NE - SE - SW - NW)
+*/
+let xSpeed = Math.random() < 0.5 ? 4 : -4;
+let ySpeed = Math.random() < 0.5 ? 4 : -4;
 
 // Function to generate a random starting position within the window bounds
 function getRandomPosition() {
